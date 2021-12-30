@@ -14,7 +14,7 @@ StructuredBuffer<data> buffer;
 
 uint iterations;
 
-[numthreads(24, 24, 1)]
+[numthreads(32, 32, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
 	double real, imag;

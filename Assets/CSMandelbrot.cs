@@ -152,7 +152,7 @@ public class CSMandelbrot : MonoBehaviour
         shader.SetInt("iterations", maxIteration);
         shader.SetTexture(kernelHandle, "Result", renderTexture);
 
-        shader.Dispatch(kernelHandle, Screen.width / 24, Screen.height / 24, 1);
+        shader.Dispatch(kernelHandle, Screen.width / 32, Screen.height / 32, 1);
 
         RenderTexture.active = renderTexture;
         rawImage.material.mainTexture = renderTexture;
