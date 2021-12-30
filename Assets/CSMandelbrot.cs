@@ -157,11 +157,11 @@ public class CSMandelbrot : MonoBehaviour
         RenderTexture.active = renderTexture;
         rawImage.material.mainTexture = renderTexture;
 
-       // real.text = rStart.ToString();
-       // imag.text = iStart.ToString();
-       // w.text = width.ToString();
-       // h.text = height.ToString();
-       // ite.text = maxIteration.ToString();
+        real.text = "Real Part: " + rStart.ToString();
+        imag.text = "Imaginary Part: " + iStart.ToString();
+        w.text = "Width: " + width.ToString();
+        h.text = "Height: " + height.ToString();
+        ite.text = "Iterations: " + maxIteration.ToString();
 
        // frame.text = Time.deltaTime.ToString();
     }
