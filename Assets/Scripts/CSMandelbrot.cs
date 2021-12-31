@@ -27,7 +27,7 @@ public class CSMandelbrot : MonoBehaviour
     double height = 2.5;
     public double rStart = -3.25;
     public double iStart = -1.4;
-    int maxIteration = 1024*4;
+    int maxIteration = 1024*2;
 
 
     //Data for the Compute Shader
