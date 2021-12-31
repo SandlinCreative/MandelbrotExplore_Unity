@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class CSMandelbrot : MonoBehaviour
 {
+    public static readonly double WIDTH = 5;
+    public static readonly double HEIGHT = 2.5;
+    public static readonly double R = -3.25;
+    public static readonly double I = -1.5;
+
     //Shader resources
     public ComputeShader shader;
     ComputeBuffer buffer;
@@ -12,17 +17,17 @@ public class CSMandelbrot : MonoBehaviour
     public RawImage rawImage;
 
     //GUI Resources
-    public TextMeshProUGUI real, imag, w, h, ite, frame;
+    public TextMeshProUGUI real, imag, w, h, ite, frame, mouseX, mouseY;
     public int increment = 3;
-    public float zoomSpeed = 0.5f;
+    public float zoomSpeed = 1.5f;
 
 
     //Mandelbrot parameters
     double width = 5;
     double height = 2.5;
-    double rStart = -3.25;
-    double iStart = -1.4;
-    int maxIteration = 1024;
+    public double rStart = -3.25;
+    public double iStart = -1.4;
+    int maxIteration = 1024*3;
 
 
     //Data for the Compute Shader
@@ -75,6 +80,36 @@ public class CSMandelbrot : MonoBehaviour
         {
             CenterScreen();
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ResetView();
+        }
+
+        double xDistFromCenter = (Input.mousePosition.x - (Screen.width / 2.0)) / Screen.width * width;
+        double yDistFromCenter = (Input.mousePosition.y - (Screen.height / 2.0)) / Screen.height * height;
+
+        //rStart += (Input.mousePosition.x - (Screen.width / 2.0)) / Screen.width * width;
+        //iStart += (Input.mousePosition.y - (Screen.height / 2.0)) / Screen.height * height;
+
+        mouseX.text = "mouse.x: " + xDistFromCenter; //Input.mousePosition.x.ToString();
+        mouseY.text = "mouse.y: " + yDistFromCenter; // Input.mousePosition.y.ToString();
+
+    }
+
+    void ResetView()
+    {
+        width  = WIDTH;
+        height = WIDTH * Screen.height / Screen.width;
+        rStart = R;
+        iStart = I;
+
+        data[0].w = width;
+        data[0].h = height;
+        data[0].r = rStart;
+        data[0].i = iStart;
+        UpdateTexture();
+
     }
 
     IEnumerator ZoomingIn()
@@ -92,12 +127,15 @@ public class CSMandelbrot : MonoBehaviour
     {
         maxIteration = Mathf.Max(100, maxIteration + increment);
 
+        double xDistFromCenter = (Input.mousePosition.x - (Screen.width / 2.0)) / Screen.width * width;
+        double yDistFromCenter = (Input.mousePosition.y - (Screen.height / 2.0)) / Screen.height * height;
+
         double wFactor = width * zoomSpeed * Time.deltaTime;
         double hFactor = height * zoomSpeed * Time.deltaTime;
         width -= wFactor;
         height -= hFactor;
-        rStart += wFactor / 2.0;
-        iStart += hFactor / 2.0;
+        rStart += wFactor / 2.0 + xDistFromCenter * 0.1;
+        iStart += hFactor / 2.0 + yDistFromCenter * 0.1;
 
         data[0].w = width;
         data[0].h = height;
@@ -113,12 +151,15 @@ public class CSMandelbrot : MonoBehaviour
     {
         maxIteration = Mathf.Max(100, maxIteration - increment);
 
+        double xDistFromCenter = (Input.mousePosition.x - (Screen.width / 2.0)) / Screen.width * width;
+        double yDistFromCenter = (Input.mousePosition.y - (Screen.height / 2.0)) / Screen.height * height;
+
         double wFactor = width * zoomSpeed * Time.deltaTime;
         double hFactor = height * zoomSpeed * Time.deltaTime;
         width += wFactor;
         height += hFactor;
-        rStart -= wFactor / 2.0;
-        iStart -= hFactor / 2.0;
+        rStart -= wFactor / 2.0 - xDistFromCenter * 0.1;
+        iStart -= hFactor / 2.0 - yDistFromCenter * 0.1;
 
         data[0].w = width;
         data[0].h = height;
@@ -129,6 +170,7 @@ public class CSMandelbrot : MonoBehaviour
 
         yield return null;
     }
+
 
     void CenterScreen()
     {
