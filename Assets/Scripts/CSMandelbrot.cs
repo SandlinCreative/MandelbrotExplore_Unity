@@ -27,7 +27,7 @@ public class CSMandelbrot : MonoBehaviour
     double height = 2.5;
     public double rStart = -3.25;
     public double iStart = -1.4;
-    int maxIteration = 1024*3;
+    int maxIteration = 1024*4;
 
 
     //Data for the Compute Shader
@@ -205,7 +205,7 @@ public class CSMandelbrot : MonoBehaviour
         h.text = "Height: " + height.ToString();
         ite.text = "Iterations: " + maxIteration.ToString();
 
-       // frame.text = Time.deltaTime.ToString();
+        frame.text = Time.deltaTime.ToString();
     }
 
 
